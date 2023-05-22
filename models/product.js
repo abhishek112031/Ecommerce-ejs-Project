@@ -8,7 +8,7 @@ class Product{
     this.price=price;
     this.imageUrl=imageUrl;
     this.description=description;
-    this._id=new mongodb.ObjectId(id);
+    this._id=id?new mongodb.ObjectId(id):null;
   }
 
   save(){
@@ -60,6 +60,8 @@ class Product{
     .then(product=>{
       console.log('single prod=>',product);
       return product;
+    }).catch(err=>{
+      console.log(err)
     })
 
   }

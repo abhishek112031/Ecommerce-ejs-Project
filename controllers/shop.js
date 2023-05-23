@@ -51,88 +51,48 @@ exports.getIndex = (req, res, next) => {
     });
 };
 
-// exports.getCart = (req, res, next) => {
+exports.getCart = (req, res, next) => {
 
-//   req.user.getCart()
-//   .then(cart=>{
-//     // console.log(cart)
-//     return cart.getProducts();
-//   })
-//   .then(products=>{
-//     res.render('shop/cart', {
-//             path: '/cart',
-//             pageTitle: 'Your Cart',
-//             products: products
-//           });
+  req.user.getCart()
+    .then(products => {
 
-//   })
-//   .catch(err=>{
-//     console.log(err);
-//   })
+      res.render('shop/cart', {
+        path: '/cart',
+        pageTitle: 'Your Cart',
+        products: products
+      });
 
-// };
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
+};
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
 
-  Product.findbyId(prodId).then(product=>{
-    return req.user.addToCart(product)
-    .then(result=>{
-      console.log(result);
+  Product.findbyId(prodId)
+    .then(product => {
+      return req.user.addToCart(product);
     })
-  })
-  // let fetchedcart;
-  // req.user.getCart()
-  // .then(cart=>{
-  //   fetchedcart=cart;
-  //   return cart.getProducts({where:{id:prodId}})
-  // })
-  // .then(products=>{
-  //   let product;
-  //   if(products.length>0){
-  //     product=products[0];
-  //   }
-  //   let newQty=1;
-  //   if(product){
-  //     const oldQty=product.cartItem.quantity;
-  //     newQty=oldQty+1;
-  //     return fetchedcart.addProduct(product,{through:{quantity:newQty}})
-  //   }
-  //   return Product.findByPk(prodId)
-  //   .then(product=>{
-  //     fetchedcart.addProduct(product,{through:{quantity:newQty}});
+    .then(result => {
+      console.log(result);
+      res.redirect('/cart');
+    })
 
-  //   })
-  //   .catch(err=>{
-  //     console.log(err);
-  //   })
-  // })
-  // .then(()=>{
-  //   res.redirect('/cart');
-  // })
-  // .catch(err=>{
-  //   console.log(err)
-  // })
-  
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-req.user.getCart()
-.then(cart=>{
-  return cart.getProducts({where:{id:prodId}})
-})
-.then(products=>{
-  const product=products[0];
- return product.cartItem.destroy();
-
-})
-.then((result)=>{
-  res.redirect('/cart')
-})
-.catch(err=>{
-  console.log(err)
-})
+  req.user.deleteFromCart(prodId)
+    
+    .then((result) => {
+      res.redirect('/cart')
+    })
+    .catch(err => {
+      console.log(err)
+    })
 };
 
 exports.getOrders = (req, res, next) => {

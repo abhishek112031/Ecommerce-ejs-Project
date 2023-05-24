@@ -22,7 +22,8 @@ exports.postAddProduct = (req, res, next) => {
   title:title,
   imageUrl:imageUrl,
   price:price,
-  description:description
+  description:description,
+  userId:req.user
  });
 
  product.save()
@@ -82,7 +83,10 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
+  // .select('title price -_id')//from product we only fetching title ,price and excluded id
+  // .populate('userId', 'name')//form userId field only fetching id and name
     .then(products => {
+      console.log(products)
       res.render('admin/products', {
         prods: products,
         pageTitle: 'Admin Products',

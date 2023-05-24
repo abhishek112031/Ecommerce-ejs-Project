@@ -18,7 +18,12 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   
- const product=new Product(title,price,imageUrl,description,null,req.user._id);
+ const product=new Product({
+  title:title,
+  imageUrl:imageUrl,
+  price:price,
+  description:description
+ });
 
  product.save()
     .then(result => {
@@ -61,7 +66,10 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
 
-    const product=new Product(updatedTitle,updatedPrice,updatedImageUrl,updatedDesc,prodId);
+    const product=new Product({
+      title:title,
+
+    });
   
   product.save()
     .then(result => {
